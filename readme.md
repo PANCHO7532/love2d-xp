@@ -19,7 +19,7 @@ No Windows (unironically), no MSYS (probably), just Linux!
 
 The instructions vary according the linux distribution, the general gist for Ubuntu is running:
 
-`sudo apt install build-essential gcc g++ cmake make g++-mingw-w64-x86-64 gcc-mingw-w64-x86-64 g++-mingw-w64-i686 gcc-mingw-w64-i686`
+`sudo apt install build-essential gcc gcc-multilib g++ cmake make mingw-w64 mingw-w64-common mingw-w64-tools mingw-w64-i686-dev mingw-w64-x86-64-dev`
 
 > Preparing the build
 
