@@ -31,13 +31,46 @@ jobs:
       - name: "Prepackage"
         run: "mkdir ship && cp build/love/*.dll ship/ && cp build/love/*.exe ship/ && cp build/bin/*.dll ship/ && cp build/SDL2/*.dll ship/ && cp build/mpg123/*.dll ship/ && cp build/openal-soft/*.dll ship/ && cp /usr/i686-w64-mingw32/lib/*.dll ship/ && cp /usr/lib/gcc/i686-w64-mingw32/13-win32/libgcc_s_dw2-1.dll ship/ && cp /usr/lib/gcc/i686-w64-mingw32/13-win32/libstdc++-6.dll ship/"
 
-#      - name: "Package"
-#        run: "zip -9 -r love32.zip ship/"
-
       - name: "Publish artifact"
         uses: actions/upload-artifact@v4
         with:
           path: ship
           name: love32
+          retention-days: 90
+          compression-level: 9
+  build64:
+    name: 64-bit build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup
+        env:
+          DEBIAN_FRONTEND: non-interactive
+        run: "sudo apt update && sudo apt install -y build-essential make gcc gcc-multilib g++ mingw-w64 binutils-mingw-w64 mingw-w64-common mingw-w64-tools mingw-w64-i686-dev mingw-w64-x86-64-dev zip"
+
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Get CMake
+        uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: 3.30.5
+
+      - name: Prepare build
+        run: cmake -B build -DCMAKE_TOOLCHAIN_FILE="mingw64.cmake"
+
+      - name: "Build love"
+        run: "cmake --build build --target love --config Release -j2"
+
+      - name: "Build lovec"
+        run: "cmake --build build --target lovec --config Release -j2"
+
+      - name: "Prepackage"
+        run: "mkdir ship && cp build/love/*.dll ship/ && cp build/love/*.exe ship/ && cp build/bin/*.dll ship/ && cp build/SDL2/*.dll ship/ && cp build/mpg123/*.dll ship/ && cp build/openal-soft/*.dll ship/ && cp /usr/x86_64-w64-mingw32/lib/*.dll ship/ && cp /usr/lib/gcc/x86_64-w64-mingw32/13-win32/libgcc_s_seh-1.dll ship/ && cp /usr/lib/gcc/i686-w64-mingw32/13-win32/libstdc++-6.dll ship/"
+
+      - name: "Publish artifact"
+        uses: actions/upload-artifact@v4
+        with:
+          path: ship
+          name: love64
           retention-days: 90
           compression-level: 9
