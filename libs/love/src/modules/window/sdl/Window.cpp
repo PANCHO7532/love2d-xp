@@ -45,7 +45,7 @@
 #if defined(LOVE_WINDOWS)
 #include <windows.h>
 #include <dwmapi.h>
-#include <VersionHelpers.h>
+#include <versionhelpers.h>
 #elif defined(LOVE_MACOSX)
 #include "common/macosx.h"
 #endif

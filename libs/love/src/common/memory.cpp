@@ -26,7 +26,7 @@
 #ifdef LOVE_WINDOWS
 #define WIN32_LEAN_AND_MEAN
 #include <malloc.h>
-#include <Windows.h>
+#include <windows.h>
 #else
 #include <unistd.h> // Assume POSIX support.
 #endif
