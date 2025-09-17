@@ -269,7 +269,7 @@ if(MSVC OR MINGW)
 		set(MEGA_LUAJIT_BUILD_BAT "
 			#!/bin/bash
 			cd \"${MEGA_LUAJIT_SOURCE_DIR}/src\"
-			make HOST_CC="gcc" CROSS=${GWTOOLCHAIN_PREFIX}- TARGET_SYS=Windows -f Makefile
+			make HOST_CC=\"gcc\" CROSS=${GWTOOLCHAIN_PREFIX}- TARGET_SYS=Windows -f Makefile
 		")
 		file(WRITE ${MEGA_LUAJIT_SOURCE_DIR}/megabuild.sh ${MEGA_LUAJIT_BUILD_BAT})
 		# Really nasty, whatever
