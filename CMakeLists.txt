@@ -266,11 +266,20 @@ if(MSVC OR MINGW)
 	set(MEGA_LUAJIT_SOURCE_DIR ${CMAKE_BINARY_DIR}/libs/${MEGA_LUAJIT_DIR})
 
 	if(MINGW)
-		set(MEGA_LUAJIT_BUILD_BAT "
-			#!/bin/bash
-			cd \"${MEGA_LUAJIT_SOURCE_DIR}/src\"
-			make HOST_CC=\"gcc\" CROSS=${GWTOOLCHAIN_PREFIX}- TARGET_SYS=Windows -f Makefile
-		")
+		# TODO: is there a better way to separate this for 32/64 bits?
+		if("${CMAKE_SYSTEM_PROCESSOR}" STREQUAL "i686")
+			set(MEGA_LUAJIT_BUILD_BAT "
+				#!/bin/bash
+				cd \"${MEGA_LUAJIT_SOURCE_DIR}/src\"
+				make HOST_CC=\"gcc -m32\" CROSS=${GWTOOLCHAIN_PREFIX}- TARGET_SYS=Windows -f Makefile
+			")
+		else()
+			set(MEGA_LUAJIT_BUILD_BAT "
+				#!/bin/bash
+				cd \"${MEGA_LUAJIT_SOURCE_DIR}/src\"
+				make HOST_CC=\"gcc\" CROSS=${GWTOOLCHAIN_PREFIX}- TARGET_SYS=Windows -f Makefile
+			")
+		endif()
 		file(WRITE ${MEGA_LUAJIT_SOURCE_DIR}/megabuild.sh ${MEGA_LUAJIT_BUILD_BAT})
 		# Really nasty, whatever
 		execute_process(COMMAND chmod +x ${MEGA_LUAJIT_SOURCE_DIR}/megabuild.sh)
