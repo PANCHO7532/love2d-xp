@@ -19,9 +19,6 @@ jobs:
         with:
           cmakeVersion: 3.30.5
 
-      - name: Logging stuff
-        run: "ls -la && ls -la .. && ls -la ../.."
-
       - name: Prepare build
         run: cmake -B build -DCMAKE_TOOLCHAIN_FILE="mingw32.cmake"
       
