@@ -1770,7 +1770,8 @@ if(MSVC OR MINGW)
 	set(LOVE_LINK_LIBRARIES ${LOVE_LINK_LIBRARIES}
 		ws2_32${WIN32_LIB_EXT}
 		winmm${WIN32_LIB_EXT}
-		dwmapi${WIN32_LIB_EXT}
+	### XP doesn't have dwmapi so we skip this one.
+	#	dwmapi${WIN32_LIB_EXT}
 	)
 
 	set(LOVE_RC
