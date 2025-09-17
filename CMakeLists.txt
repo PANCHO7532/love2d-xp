@@ -54,7 +54,7 @@ endfunction()
 
 function(disable_warnings ARG_TARGET)
 	get_target_property(OLD_FLAGS ${ARG_TARGET} COMPILE_FLAGS)
-	if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+	if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
 		set(NEW_FLAGS -w)
 	else ()
 		set(NEW_FLAGS -W0)
@@ -248,7 +248,7 @@ add_subdirectory("libs/libmodplug-${MEGA_MODPLUG_VER}" ${CMAKE_BINARY_DIR}/libmo
 set(MEGA_MODPLUG modplug-static)
 
 # LuaJIT
-if(MSVC)
+if(MSVC OR (MINGW AND UNIX))
 	message(STATUS "-----------------------------------------------------")
 	message(STATUS "Configuring: LuaJIT ${MEGA_LUAJIT_VER}")
 	message(STATUS "-----------------------------------------------------")
@@ -261,27 +261,51 @@ if(MSVC)
 
 	set(MEGA_LUAJIT_SOURCE_DIR ${CMAKE_BINARY_DIR}/libs/${MEGA_LUAJIT_DIR})
 
-	set(MEGA_LUAJIT_BUILD_BAT "
-		@echo off
-		call \"${MEGA_MSVC_VCVARSALL_BAT}\" ${MEGA_MSVC_VCVARSALL_BAT_ARG}
-		cd \"${MEGA_LUAJIT_SOURCE_DIR}/src\"
-		if %1 == \"\" shift /1
-		msvcbuild.bat %1 %2
-	")
-
-	file(WRITE ${MEGA_LUAJIT_SOURCE_DIR}/megabuild.bat ${MEGA_LUAJIT_BUILD_BAT})
-
-	ExternalProject_Add(luajit
-		SOURCE_DIR ${MEGA_LUAJIT_SOURCE_DIR}
-		BUILD_IN_SOURCE 1
-		CONFIGURE_COMMAND ""
-		BUILD_COMMAND "${MEGA_LUAJIT_SOURCE_DIR}/megabuild.bat" $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:debug> $<$<NOT:$<CONFIG:Debug>>:amalg>
-		INSTALL_COMMAND cmake -E make_directory ${CMAKE_BINARY_DIR}/bin
+	if(MINGW AND UNIX)
+		set(MEGA_LUAJIT_BUILD_BAT "
+			#!/bin/bash
+			cd \"${MEGA_LUAJIT_SOURCE_DIR}/src\"
+			make HOST_CC="gcc" CROSS=${GWTOOLCHAIN_PREFIX}- TARGET_SYS=Windows -f Makefile
+		")
+		file(WRITE ${MEGA_LUAJIT_SOURCE_DIR}/megabuild.sh ${MEGA_LUAJIT_BUILD_BAT})
+		# Really nasty, whatever
+		execute_process(COMMAND chmod +x ${MEGA_LUAJIT_SOURCE_DIR}/megabuild.sh)
+		#################
+		ExternalProject_Add(luajit
+			SOURCE_DIR ${MEGA_LUAJIT_SOURCE_DIR}
+			BUILD_IN_SOURCE 1
+			CONFIGURE_COMMAND ""
+			BUILD_COMMAND "${MEGA_LUAJIT_SOURCE_DIR}/megabuild.sh" $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:debug> $<$<NOT:$<CONFIG:Debug>>:amalg>
+			INSTALL_COMMAND cmake -E make_directory ${CMAKE_BINARY_DIR}/bin
+			COMMAND cmake -E copy ${MEGA_LUAJIT_SOURCE_DIR}/src/lua51.dll ${CMAKE_BINARY_DIR}/bin
+			COMMAND cmake -E copy ${MEGA_LUAJIT_SOURCE_DIR}/src/libluajit-5.1.dll.a ${CMAKE_BINARY_DIR}/bin/lua51.a)
+		#################
+		set(MEGA_LUAJIT_LIB ${CMAKE_BINARY_DIR}/bin/lua51.a)
+		set(MEGA_LUAJIT_DLL ${CMAKE_BINARY_DIR}/bin/lua51.dll)
+	else()
+		set(MEGA_LUAJIT_BUILD_BAT "
+			@echo off
+			call \"${MEGA_MSVC_VCVARSALL_BAT}\" ${MEGA_MSVC_VCVARSALL_BAT_ARG}
+			cd \"${MEGA_LUAJIT_SOURCE_DIR}/src\"
+			if %1 == \"\" shift /1
+			msvcbuild.bat %1 %2
+		")
+		file(WRITE ${MEGA_LUAJIT_SOURCE_DIR}/megabuild.bat ${MEGA_LUAJIT_BUILD_BAT})
+		#################
+		ExternalProject_Add(luajit
+			SOURCE_DIR ${MEGA_LUAJIT_SOURCE_DIR}
+			BUILD_IN_SOURCE 1
+			CONFIGURE_COMMAND ""
+			BUILD_COMMAND "${MEGA_LUAJIT_SOURCE_DIR}/megabuild.bat" $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:debug> $<$<NOT:$<CONFIG:Debug>>:amalg>
+			INSTALL_COMMAND cmake -E make_directory ${CMAKE_BINARY_DIR}/bin
 			COMMAND cmake -E copy ${MEGA_LUAJIT_SOURCE_DIR}/src/lua51.dll ${CMAKE_BINARY_DIR}/bin
 			COMMAND cmake -E copy ${MEGA_LUAJIT_SOURCE_DIR}/src/lua51.lib ${CMAKE_BINARY_DIR}/bin)
+		#################
+		set(MEGA_LUAJIT_LIB ${CMAKE_BINARY_DIR}/bin/lua51.a)
+		set(MEGA_LUAJIT_DLL ${CMAKE_BINARY_DIR}/bin/lua51.dll)
+	endif()
 
-	set(MEGA_LUAJIT_LIB ${CMAKE_BINARY_DIR}/bin/lua51.lib)
-	set(MEGA_LUAJIT_DLL ${CMAKE_BINARY_DIR}/bin/lua51.dll)
+	
 	set(MEGA_LUAJIT_INCLUDE ${MEGA_LUAJIT_SOURCE_DIR}/src)
 
 endif()
@@ -323,6 +347,11 @@ if(EXISTS ${MEGA_LOVE}/CMakeLists.txt)
 else()
 	message(STATUS "LOVE was not found")
 endif()
+
+if(NOT DEFINED SDL_LINK_DIR)
+	set(SDL_LINK_DIR "${CMAKE_BINARY_DIR}/build/SDL2")
+endif()
+message(STATUS "SDL_LINK_DIR: ${SDL_LINK_DIR}")
 
 link_directories(${SDL_LINK_DIR})
 add_executable(megatest src/test.cpp)
