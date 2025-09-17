@@ -9,7 +9,10 @@ jobs:
       - name: Setup
         env:
           DEBIAN_FRONTEND: non-interactive
-        run: "sudo apt update && sudo apt upgrade -y && sudo apt install -y build-essential cmake make gcc g++ g++-mingw-w64-x86-64 gcc-mingw-w64-x86-64"
+        run: "sudo apt update && sudo apt install -y build-essential cmake make gcc g++ g++-mingw-w64-x86-64 gcc-mingw-w64-x86-64"
+
+      - name: Logging stuff
+        run: "ls -la && ls -la .. && ls -la ../.."
 
       - name: Prepare build
         run: cmake -B build -DCMAKE_TOOLCHAIN_FILE="${CMAKE_SOURCE_DIR}/mingw32.cmake"
