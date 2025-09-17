@@ -254,6 +254,31 @@ int opt_set_ip6_v6only(lua_State *L, p_socket ps)
 /*=========================================================================*\
 * Auxiliar functions
 \*=========================================================================*/
+// From https://stackoverflow.com/a/20817001
+int lls_inet_pton_xp(int af, const char *src, void *dst)
+{
+  struct sockaddr_storage ss;
+  int size = sizeof(ss);
+  char src_copy[INET6_ADDRSTRLEN+1];
+
+  ZeroMemory(&ss, sizeof(ss));
+  /* stupid non-const API */
+  strncpy (src_copy, src, INET6_ADDRSTRLEN+1);
+  src_copy[INET6_ADDRSTRLEN] = 0;
+
+  if (WSAStringToAddress(src_copy, af, NULL, (struct sockaddr *)&ss, &size) == 0) {
+    switch(af) {
+      case AF_INET:
+    *(struct in_addr *)dst = ((struct sockaddr_in *)&ss)->sin_addr;
+    return 1;
+      case AF_INET6:
+    *(struct in6_addr *)dst = ((struct sockaddr_in6 *)&ss)->sin6_addr;
+    return 1;
+    }
+  }
+  return 0;
+}
+
 static int opt_setmembership(lua_State *L, p_socket ps, int level, int name)
 {
     struct ip_mreq val;                   /* obj, name, table */
@@ -284,7 +309,7 @@ static int opt_ip6_setmembership(lua_State *L, p_socket ps, int level, int name)
     lua_gettable(L, 3);
     if (!lua_isstring(L, -1))
         luaL_argerror(L, 3, "string 'multiaddr' field expected");
-    if (!inet_pton(AF_INET6, lua_tostring(L, -1), &val.ipv6mr_multiaddr))
+    if (!lls_inet_pton_xp(AF_INET6, lua_tostring(L, -1), &val.ipv6mr_multiaddr))
         luaL_argerror(L, 3, "invalid 'multiaddr' ip address");
     lua_pushstring(L, "interface");
     lua_gettable(L, 3);
