@@ -35,7 +35,7 @@ demos
 /src/.libs/
 *~
 Makefile*
-config*
+#config*
 libtool
 /platform/unix/ar-lib
 /platform/unix/compile
