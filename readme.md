@@ -1,4 +1,4 @@
-## LOVE2D for Windows XP
+# LOVE2D for Windows XP
 Because it's fun to see if it's possible
 
 > [!IMPORTANT]  
@@ -11,22 +11,48 @@ Because it's fun to see if it's possible
 >
 > Support for other compilers are not covered and I don't guarantee you that it compiles on anything else that's not MinGW
 
-### Why?
+## Compile instructions
+You need a linux distribution. Period.
+No Windows (unironically), no MSYS (probably), just Linux!
+
+> Installing MinGW
+
+The instructions vary according the linux distribution, the general gist for Ubuntu is running:
+
+`sudo apt install build-essential gcc g++ cmake make g++-mingw-w64-x86-64 gcc-mingw-w64-x86-64`
+
+> Preparing the build
+
+Spin up a terminal on this directory and write `cmake -B build -DCMAKE_TOOLCHAIN_FILE="${CMAKE_SOURCE_DIR}/mingw32.cmake"`
+
+If you want to prepare the build for 64-bit, change the command part where it says `mingw32` to `mingw64`
+
+> Building
+
+Execute `cmake --build build --target love --config Release` and pray
+
+> Running
+
+By default, binaries are seemengly not moved properly in one-folder, you need to grab `love.dll` (`libliblove.dll` in some cases) and `love.exe` from `build/love` and put it on a clean directory, then grab the compiled luajit in `bin` directory, libmpg123, OpenAL32.dll, SDL2.dll from their respective directories on `build` directory, and finally, `libgcc*.dll`, `libstdc++6.dll` and `libwinpthread-1.dll` from `/usr/(arch)-w64-mingw32/bin`, where `(arch)` might be `i686` if you targeted 32 bits, `x86_64` if you targeted 64 bits. (If you can't find any of these last dlls, check the `lib` or `lib64` folder as distros sometimes put them there)
+
+Once you've got all the DLLs in one single folder, including the executable for the engine, you can now safely run `love.exe`
+
+## Why?
 Currently I'm stuck with an [laptop](https://soporte.exo.com.ar/support/solutions/articles/22000272369-netbook-exo-smart-x352) that has Windows XP x64 SP2, and I want to compile stuff for it just to see how "modern" software holds up on old-systems, Love2D is one of them.
 
 I personally think that a modern game engine running on XP is hilariously awesome and interesting to see, so I'll be treating this repo as a playground to see if I can make it work.
 
-### How?
+## How?
 By disabling a lot of code, pasting equivalent functions for modern functions and a little bit of *love* it surely can compile!
 
 MinGW is the compiler of choice in this journey, not only it can compile for Windows XP with a few defines, but it can go as far as NT 4! Though with the current state of LOVE2D, the hard stop will be Windows XP anyway.
 
 This repository is a fusion of the megasource/love2d repos in order to keep the dependencies and engine code in one-place for convenience.
 
-### The future
+## The future
 I'm a solo-dev on this little side-project. If you want to collaborate, then feel free to do so! Currently I'm on college so new changes won't be rolling out as often as I'd like to.
 
---------
+## Original README
 
 Megasource is a CMake-buildable collection of all [LÖVE][love2d] dependencies.
 
