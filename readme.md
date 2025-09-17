@@ -1,3 +1,33 @@
+## LOVE2D for Windows XP
+Because it's fun to see if it's possible
+
+> [!IMPORTANT]  
+> The source code shown in this repository is exclusively intended to use under Windows **XP**
+>
+> Issues and support for other operating systems will not be covered or discussed.
+
+> [!NOTE]
+> Everything is wired to work exclusively via cross-compilation with MinGW on Linux.
+>
+> Support for other compilers are not covered and I don't guarantee you that it compiles on anything else that's not MinGW
+
+### Why?
+Currently I'm stuck with an [laptop](https://soporte.exo.com.ar/support/solutions/articles/22000272369-netbook-exo-smart-x352) that has Windows XP x64 SP2, and I want to compile stuff for it just to see how "modern" software holds up on old-systems, Love2D is one of them.
+
+I personally think that a modern game engine running on XP is hilariously awesome and interesting to see, so I'll be treating this repo as a playground to see if I can make it work.
+
+### How?
+By disabling a lot of code, pasting equivalent functions for modern functions and a little bit of *love* it surely can compile!
+
+MinGW is the compiler of choice in this journey, not only it can compile for Windows XP with a few defines, but it can go as far as NT 4! Though with the current state of LOVE2D, the hard stop will be Windows XP anyway.
+
+This repository is a fusion of the megasource/love2d repos in order to keep the dependencies and engine code in one-place for convenience.
+
+### The future
+I'm a solo-dev on this little side-project. If you want to collaborate, then feel free to do so! Currently I'm on college so new changes won't be rolling out as often as I'd like to.
+
+--------
+
 Megasource is a CMake-buildable collection of all [LÖVE][love2d] dependencies.
 
 It is currently only officially supported on Windows, but may also work on macOS. It could certainly also work on Linux, but good package managers makes megasource less relevant there.
