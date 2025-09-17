@@ -1,5 +1,5 @@
 name: Build
-on: [push, workflow_dispatch]
+on: [workflow_dispatch]
 
 jobs:
   build32:
@@ -26,4 +26,4 @@ jobs:
         run: cmake -B build -DCMAKE_TOOLCHAIN_FILE="mingw32.cmake"
       
       - name: "Build"
-        run: "cmake --build build --target love --config Release"
+        run: "cmake --build build --target love --config Release -j2"
