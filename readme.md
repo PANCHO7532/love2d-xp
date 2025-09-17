@@ -19,11 +19,11 @@ No Windows (unironically), no MSYS (probably), just Linux!
 
 The instructions vary according the linux distribution, the general gist for Ubuntu is running:
 
-`sudo apt install build-essential gcc g++ cmake make g++-mingw-w64-x86-64 gcc-mingw-w64-x86-64`
+`sudo apt install build-essential gcc g++ cmake make g++-mingw-w64-x86-64 gcc-mingw-w64-x86-64 g++-mingw-w64-i686 gcc-mingw-w64-i686`
 
 > Preparing the build
 
-Spin up a terminal on this directory and write `cmake -B build -DCMAKE_TOOLCHAIN_FILE="${CMAKE_SOURCE_DIR}/mingw32.cmake"`
+Spin up a terminal on this directory and write `cmake -B build -DCMAKE_TOOLCHAIN_FILE=mingw32.cmake`
 
 If you want to prepare the build for 64-bit, change the command part where it says `mingw32` to `mingw64`
 
