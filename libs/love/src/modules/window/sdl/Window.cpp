@@ -44,7 +44,9 @@
 
 #if defined(LOVE_WINDOWS)
 #include <windows.h>
-#include <dwmapi.h>
+// dwmapi is not available on Windows XP
+// TODO: Fix later whatever needed dwmapi :)
+//#include <dwmapi.h>
 #include <versionhelpers.h>
 #elif defined(LOVE_MACOSX)
 #include "common/macosx.h"
@@ -1027,7 +1029,7 @@ bool Window::isMinimized() const
 
 void Window::swapBuffers()
 {
-#ifdef LOVE_WINDOWS
+#if 0 // LOVE_WINDOWS
 	bool useDwmFlush = false;
 	int swapInterval = getVSync();
 
@@ -1071,7 +1073,7 @@ void Window::swapBuffers()
 
 	SDL_GL_SwapWindow(window);
 
-#ifdef LOVE_WINDOWS
+#if 0 // LOVE_WINDOWS
 	if (useDwmFlush)
 	{
 		DwmFlush();
