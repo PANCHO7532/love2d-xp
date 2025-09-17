@@ -69,7 +69,7 @@ SET(LINKER_FLAGS )
 SET(EXTRA_LIBS )
 
 IF(WIN32)
-    SET(CPP_DEFS ${CPP_DEFS} _WIN32 _WIN32_WINNT=0x0502)
+    SET(CPP_DEFS ${CPP_DEFS} _WIN32 _WIN32_WINNT=0x0501) # XP (not server)
 
     OPTION(ALSOFT_BUILD_ROUTER  "Build the router (EXPERIMENTAL; creates OpenAL32.dll and soft_oal.dll)"  OFF)
 
@@ -123,6 +123,10 @@ ELSE()
         SET(CMAKE_C_FLAGS "-std=c99 ${CMAKE_C_FLAGS}")
     ENDIF()
 ENDIF()
+
+# see https://github.com/kcat/openal-soft/issues/519
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fcommon")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fcommon")
 
 CHECK_CXX_COMPILER_FLAG(-std=c++11 HAVE_STD_CXX11)
 IF(HAVE_STD_CXX11)
