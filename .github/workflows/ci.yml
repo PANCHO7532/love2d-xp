@@ -9,7 +9,7 @@ jobs:
       - name: Setup
         env:
           DEBIAN_FRONTEND: non-interactive
-        run: "sudo apt update && sudo apt install -y build-essential make gcc g++ g++-mingw-w64-x86-64 gcc-mingw-w64-x86-64"
+        run: "sudo apt update && sudo apt install -y build-essential make gcc g++ g++-mingw-w64-i686 gcc-mingw-w64-i686"
 
       - name: Checkout source
         uses: actions/checkout@v4
