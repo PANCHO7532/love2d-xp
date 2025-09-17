@@ -252,7 +252,7 @@ add_subdirectory("libs/libmodplug-${MEGA_MODPLUG_VER}" ${CMAKE_BINARY_DIR}/libmo
 set(MEGA_MODPLUG modplug-static)
 
 # LuaJIT
-if(MSVC OR (MINGW AND UNIX))
+if(MSVC OR MINGW)
 	message(STATUS "-----------------------------------------------------")
 	message(STATUS "Configuring: LuaJIT ${MEGA_LUAJIT_VER}")
 	message(STATUS "-----------------------------------------------------")
@@ -265,7 +265,7 @@ if(MSVC OR (MINGW AND UNIX))
 
 	set(MEGA_LUAJIT_SOURCE_DIR ${CMAKE_BINARY_DIR}/libs/${MEGA_LUAJIT_DIR})
 
-	if(MINGW AND UNIX)
+	if(MINGW)
 		set(MEGA_LUAJIT_BUILD_BAT "
 			#!/bin/bash
 			cd \"${MEGA_LUAJIT_SOURCE_DIR}/src\"
@@ -353,7 +353,7 @@ else()
 endif()
 
 if(NOT DEFINED SDL_LINK_DIR)
-	set(SDL_LINK_DIR "${CMAKE_BINARY_DIR}/build/SDL2")
+	set(SDL_LINK_DIR "${CMAKE_BINARY_DIR}/SDL2")
 endif()
 message(STATUS "SDL_LINK_DIR: ${SDL_LINK_DIR}")
 
