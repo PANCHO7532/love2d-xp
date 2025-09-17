@@ -23,7 +23,7 @@ jobs:
         run: "ls -la && ls -la .. && ls -la ../.."
 
       - name: Prepare build
-        run: cmake -B build -DCMAKE_TOOLCHAIN_FILE="${CMAKE_SOURCE_DIR}/mingw32.cmake"
+        run: cmake -B build -DCMAKE_TOOLCHAIN_FILE="mingw32.cmake"
       
       - name: "Build"
         run: "cmake --build build --target love --config Release"
