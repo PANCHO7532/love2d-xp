@@ -210,7 +210,7 @@ template <class T> T Max(const T a, const T b) { return a > b ? a : b; }
 //
 // Create a TString object from an integer.
 //
-#if defined _MSC_VER || defined MINGW_HAS_SECURE_API
+#if (defined _MSC_VER || defined MINGW_HAS_SECURE_API) && _WIN32_WINNT >= 0x600
 inline const TString String(const int i, const int base = 10)
 {
     char text[16];     // 32 bit ints are at most 10 digits in base 10
