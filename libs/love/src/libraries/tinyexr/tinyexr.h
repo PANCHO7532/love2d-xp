@@ -11663,7 +11663,7 @@ int LoadEXRImageFromFile(EXRImage *exr_image, const EXRHeader *exr_header,
     return TINYEXR_ERROR_INVALID_ARGUMENT;
   }
 
-#ifdef _WIN32 && defined(_MSC_VER)
+#if defined(_WIN32) && defined(_MSC_VER)
   FILE *fp = NULL;
   fopen_s(&fp, filename, "rb");
 #else
@@ -12252,7 +12252,7 @@ int SaveEXRImageToFile(const EXRImage *exr_image, const EXRHeader *exr_header,
   }
 #endif
 
-#ifdef _WIN32 && defined(_MSC_VER)
+#if defined(_WIN32) && defined(_MSC_VER)
   FILE *fp = NULL;
   fopen_s(&fp, filename, "wb");
 #else
@@ -12291,7 +12291,7 @@ int LoadDeepEXR(DeepImage *deep_image, const char *filename, const char **err) {
     return TINYEXR_ERROR_INVALID_ARGUMENT;
   }
 
-#ifdef _MSC_VER && defined(_MSC_VER)
+#ifdef _MSC_VER
   FILE *fp = NULL;
   errno_t errcode = fopen_s(&fp, filename, "rb");
   if ((0 != errcode) || (!fp)) {
@@ -12768,7 +12768,7 @@ int ParseEXRHeaderFromFile(EXRHeader *exr_header, const EXRVersion *exr_version,
     return TINYEXR_ERROR_INVALID_ARGUMENT;
   }
 
-#ifdef _WIN32 && defined(_MSC_VER)
+#if defined(_WIN32) && defined(_MSC_VER)
   FILE *fp = NULL;
   fopen_s(&fp, filename, "rb");
 #else
@@ -12888,7 +12888,7 @@ int ParseEXRMultipartHeaderFromFile(EXRHeader ***exr_headers, int *num_headers,
     return TINYEXR_ERROR_INVALID_ARGUMENT;
   }
 
-#ifdef _WIN32 && defined(_MSC_VER)
+#if defined(_WIN32) && defined(_MSC_VER)
   FILE *fp = NULL;
   fopen_s(&fp, filename, "rb");
 #else
@@ -12984,7 +12984,7 @@ int ParseEXRVersionFromFile(EXRVersion *version, const char *filename) {
     return TINYEXR_ERROR_INVALID_ARGUMENT;
   }
 
-#ifdef _WIN32 && defined(_MSC_VER)
+#if defined(_WIN32) && defined(_MSC_VER)
   FILE *fp = NULL;
   fopen_s(&fp, filename, "rb");
 #else
@@ -13122,7 +13122,7 @@ int LoadEXRMultipartImageFromFile(EXRImage *exr_images,
     return TINYEXR_ERROR_INVALID_ARGUMENT;
   }
 
-#ifdef _WIN32 && defined(_MSC_VER)
+#if defined(_WIN32) && defined(_MSC_VER)
   FILE *fp = NULL;
   fopen_s(&fp, filename, "rb");
 #else
