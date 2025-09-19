@@ -23,10 +23,10 @@ jobs:
         run: cmake -B build -DCMAKE_TOOLCHAIN_FILE="mingw32.cmake"
 
       - name: "Build love"
-        run: "cmake --build build --target love --config Release -j2"
+        run: "cmake --build build --target love --config Release -parallel 2"
 
       - name: "Build lovec"
-        run: "cmake --build build --target lovec --config Release -j2"
+        run: "cmake --build build --target lovec --config Release -parallel 2"
 
       - name: "Prepackage"
         run: "mkdir ship && cp build/love/*.dll ship/ && cp build/love/*.exe ship/ && cp build/bin/*.dll ship/ && cp build/SDL2/*.dll ship/ && cp build/mpg123/*.dll ship/ && cp build/openal-soft/*.dll ship/ && cp /usr/i686-w64-mingw32/lib/*.dll ship/ && cp /usr/lib/gcc/i686-w64-mingw32/13-win32/libgcc_s_dw2-1.dll ship/ && cp /usr/lib/gcc/i686-w64-mingw32/13-win32/libstdc++-6.dll ship/"
