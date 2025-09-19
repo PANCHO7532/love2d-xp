@@ -185,9 +185,9 @@ set(ZLIB_INCLUDE_DIR .)
 
 set(OGG_LIBRARY ogg-static)
 
-# explicitly request Windows XP compatbility
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_WIN32_WINNT=0x501")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32_WINNT=0x501")
+# explicitly request Windows XP API compatbility and disable some stuff to improve compatbility with msvcrt builds
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_WIN32_WINNT=0x501 -DHAVE_ITOA=0")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_WIN32_WINNT=0x501 -DHAVE_ITOA=0")
 
 message(STATUS "-----------------------------------------------------")
 message(STATUS "Configuring: zlib ${MEGA_ZLIB_VER}")
