@@ -271,18 +271,25 @@ if(MSVC OR MINGW)
 			set(MEGA_LUAJIT_BUILD_BAT "
 				#!/bin/bash
 				cd \"${MEGA_LUAJIT_SOURCE_DIR}/src\"
-				make HOST_CC=\"gcc -m32\" CROSS=${GWTOOLCHAIN_PREFIX}- TARGET_SYS=Windows -f Makefile
+				make HOST_CC=\"gcc -m32\" CROSS=./${GWTOOLCHAIN_PREFIX}- TARGET_SYS=Windows -f Makefile
 			")
 		else()
 			set(MEGA_LUAJIT_BUILD_BAT "
 				#!/bin/bash
 				cd \"${MEGA_LUAJIT_SOURCE_DIR}/src\"
-				make HOST_CC=\"gcc\" CROSS=${GWTOOLCHAIN_PREFIX}- TARGET_SYS=Windows -f Makefile
+				make HOST_CC=\"gcc\" CROSS=./${GWTOOLCHAIN_PREFIX}- TARGET_SYS=Windows -f Makefile
 			")
 		endif()
+		# We do assume that this is in the path, right?
+		set(MEGA_LUAJIT_BUILD_TOOLCHAINBRIDGE "
+				#!/bin/bash
+				${GWTOOLCHAIN_PREFIX}-gcc${GWTOOLCHAIN_THREADMODEL} $@
+		")
 		file(WRITE ${MEGA_LUAJIT_SOURCE_DIR}/megabuild.sh ${MEGA_LUAJIT_BUILD_BAT})
+		file(WRITE ${MEGA_LUAJIT_SOURCE_DIR}/src/${GWTOOLCHAIN_PREFIX}-gcc ${MEGA_LUAJIT_BUILD_BAT})
 		# Really nasty, whatever
 		execute_process(COMMAND chmod +x ${MEGA_LUAJIT_SOURCE_DIR}/megabuild.sh)
+		execute_process(COMMAND chmod +x ${MEGA_LUAJIT_SOURCE_DIR}/src/${GWTOOLCHAIN_PREFIX}-gcc)
 		#################
 		ExternalProject_Add(luajit
 			SOURCE_DIR ${MEGA_LUAJIT_SOURCE_DIR}
