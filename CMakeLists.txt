@@ -285,11 +285,17 @@ if(MSVC OR MINGW)
 				#!/bin/bash
 				${GWTOOLCHAIN_PREFIX}-gcc${GWTOOLCHAIN_THREADMODEL} $@
 		")
+		set(MEGA_LUAJIT_BUILD_STRIPBRIDGE "
+				#!/bin/bash
+				${GWTOOLCHAIN_PREFIX}-strip $@
+		")
 		file(WRITE ${MEGA_LUAJIT_SOURCE_DIR}/megabuild.sh ${MEGA_LUAJIT_BUILD_BAT})
 		file(WRITE ${MEGA_LUAJIT_SOURCE_DIR}/src/${GWTOOLCHAIN_PREFIX}-gcc ${MEGA_LUAJIT_BUILD_TOOLCHAINBRIDGE})
+		file(WRITE ${MEGA_LUAJIT_SOURCE_DIR}/src/${GWTOOLCHAIN_PREFIX}-strip ${MEGA_LUAJIT_BUILD_STRIPBRIDGE})
 		# Really nasty, whatever
 		execute_process(COMMAND chmod +x ${MEGA_LUAJIT_SOURCE_DIR}/megabuild.sh)
 		execute_process(COMMAND chmod +x ${MEGA_LUAJIT_SOURCE_DIR}/src/${GWTOOLCHAIN_PREFIX}-gcc)
+		execute_process(COMMAND chmod +x ${MEGA_LUAJIT_SOURCE_DIR}/src/${GWTOOLCHAIN_PREFIX}-strip)
 		#################
 		ExternalProject_Add(luajit
 			SOURCE_DIR ${MEGA_LUAJIT_SOURCE_DIR}
