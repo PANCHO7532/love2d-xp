@@ -59,7 +59,7 @@ jobs:
     name: 64-bit build
     runs-on: ubuntu-latest
     outputs:
-      artifact_name: love2dxp-x86
+      artifact_name: love2dxp-x64
     container: amd64/alpine:3.22
     steps:
       - name: Setup
@@ -148,6 +148,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.artifact_download32.download-path }}
+          asset_path: ${{ steps.artifact_download64.download-path }}
           asset_name: love2dxp-x64.zip
           asset_content_type: application/zip
