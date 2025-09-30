@@ -18,7 +18,7 @@ jobs:
         #env:
         #  DEBIAN_FRONTEND: non-interactive
         #run: "sudo apt update && sudo apt install -y build-essential make gcc gcc-multilib g++ mingw-w64 binutils-mingw-w64 mingw-w64-common mingw-w64-tools mingw-w64-i686-dev mingw-w64-x86-64-dev zip"
-        run: "apk update && apk add cmake make gcc musl-dev linux-headers mingw-w64-binutils mingw-w64-crt mingw-w64-gcc mingw-w64-gcc-ccache mingw-w64-headers mingw-w64-headers-doc mingw-w64-winpthreads mingw-w64-winpthreads-doc"
+        run: "apk update && apk add cmake make gcc g++ musl-dev linux-headers mingw-w64-binutils mingw-w64-crt mingw-w64-gcc mingw-w64-gcc-ccache mingw-w64-headers mingw-w64-headers-doc mingw-w64-winpthreads mingw-w64-winpthreads-doc"
 
       - name: Checkout source
         uses: actions/checkout@v4
@@ -56,7 +56,7 @@ jobs:
         #env:
         #  DEBIAN_FRONTEND: non-interactive
         #run: "sudo apt update && sudo apt install -y build-essential make gcc gcc-multilib g++ mingw-w64 binutils-mingw-w64 mingw-w64-common mingw-w64-tools mingw-w64-i686-dev mingw-w64-x86-64-dev zip"
-        run: apk update && apk add cmake make gcc musl-dev linux-headers mingw-w64-binutils mingw-w64-crt mingw-w64-gcc mingw-w64-gcc-ccache mingw-w64-headers mingw-w64-headers-doc mingw-w64-winpthreads mingw-w64-winpthreads-doc
+        run: apk update && apk add cmake make gcc g++ musl-dev linux-headers mingw-w64-binutils mingw-w64-crt mingw-w64-gcc mingw-w64-gcc-ccache mingw-w64-headers mingw-w64-headers-doc mingw-w64-winpthreads mingw-w64-winpthreads-doc
 
       - name: Checkout source
         uses: actions/checkout@v4
