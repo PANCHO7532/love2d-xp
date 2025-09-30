@@ -117,7 +117,7 @@ jobs:
           name: ${{ needs.build64.outputs.artifact_name }}
 
       - name: Zip artifacts
-        run: cd build32/ship && zip -9 -r love2dxp-x86.zip ./ && cd ../../build64/ship && zip -9 -r love2dxp-x64.zip ./
+        run: ls -la && tree && cd build32/ship && zip -9 -r love2dxp-x86.zip ./ && cd ../../build64/ship && zip -9 -r love2dxp-x64.zip ./
 
       - name: Create GitHub Release
         id: create_release
