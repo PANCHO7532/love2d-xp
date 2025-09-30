@@ -43,9 +43,11 @@ The instructions vary according the linux distribution, the general gist for Ubu
 `sudo apt install build-essential gcc gcc-multilib g++ cmake make mingw-w64 binutils-mingw-w64 mingw-w64-common mingw-w64-tools mingw-w64-i686-dev mingw-w64-x86-64-dev`
 
 Builds generated in this repo are compiled with Alpine Linux for UCRT compatbility, if you're on Alpine, then run these:
+
 `apk add cmake make gcc g++ musl-dev linux-headers mingw-w64-binutils mingw-w64-crt mingw-w64-gcc mingw-w64-gcc-ccache mingw-w64-headers mingw-w64-headers-doc mingw-w64-winpthreads mingw-w64-winpthreads-doc`
 > [!NOTE]
 > On Alpine you can only compile for the CPU architecture that the OS is running, and there are native compilation tools in LOVE2D that fail due to this quirk as its gcc is not multilib.
+>
 > If you want an specific architecture, you'll need to use a docker container or a VM of Alpine Linux with the correct architecture you want.
 
 ### Preparing the build
