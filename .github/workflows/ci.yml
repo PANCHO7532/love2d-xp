@@ -38,7 +38,7 @@ jobs:
         run: "cmake --build build --target lovec --config Release --parallel 2"
 
       - name: "Prepackage"
-        run: "mkdir ship && cp build/love/*.dll ship/ && cp build/love/*.exe ship/ && cp build/bin/*.dll ship/ && cp build/SDL2/*.dll ship/ && cp build/mpg123/*.dll ship/ && cp build/openal-soft/*.dll ship/ && cp /usr/i686-w64-mingw32/bin/libgcc_s_dw2-1.dll ship/ && cp /usr/i686-w64-mingw32/bin/libstdc++-6.dll ship/ && cp /usr/x86_64-w64-mingw32/bin/libwinpthread-1.dll ship/"
+        run: "mkdir ship && cp build/love/*.dll ship/ && cp build/love/*.exe ship/ && cp build/bin/*.dll ship/ && cp build/SDL2/*.dll ship/ && cp build/mpg123/*.dll ship/ && cp build/openal-soft/*.dll ship/ && cp /usr/i686-w64-mingw32/bin/libgcc_s_dw2-1.dll ship/ && cp /usr/i686-w64-mingw32/bin/libstdc++-6.dll ship/ && cp /usr/i686-w64-mingw32/bin/libwinpthread-1.dll ship/"
 
       - name: "Publish artifact"
         uses: actions/upload-artifact@v4
