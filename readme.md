@@ -24,7 +24,7 @@ Because it's fun to see if it's possible
 >
 > OpenGL 1.4 support is on the works.
 
-1) Download the .zip file from the releases page: [https://github.com/PANCHO7532/love2d-xp/releases](https://github.com/PANCHO7532/love2d-xp/releases) (you're encouraged to download the one for your processor, in doubt, download the 32-bit one)
+1) Download the .zip file from the releases page: [https://github.com/PANCHO7532/love2d-xp/releases](https://github.com/PANCHO7532/love2d-xp/releases) (you're encouraged to download the one for your processor, in doubt, download the x86 one for 32-bit systems)
 2) Unzip it to a clean folder (as in, an empty folder with nothing inside)
 3) Execute `love.exe`, if you can see the "no game" screen, then the engine is working!
 4) Drag your .love file to `love.exe` or the folder with your game files in order to load your game.
