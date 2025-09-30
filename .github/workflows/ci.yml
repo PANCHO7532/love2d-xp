@@ -5,19 +5,21 @@ jobs:
   build32:
     name: 32-bit build
     runs-on: ubuntu-latest
+    container: i386/alpine:3.22
     steps:
       - name: Setup
-        env:
-          DEBIAN_FRONTEND: non-interactive
-        run: "sudo apt update && sudo apt install -y build-essential make gcc gcc-multilib g++ mingw-w64 binutils-mingw-w64 mingw-w64-common mingw-w64-tools mingw-w64-i686-dev mingw-w64-x86-64-dev zip"
+        #env:
+        #  DEBIAN_FRONTEND: non-interactive
+        #run: "sudo apt update && sudo apt install -y build-essential make gcc gcc-multilib g++ mingw-w64 binutils-mingw-w64 mingw-w64-common mingw-w64-tools mingw-w64-i686-dev mingw-w64-x86-64-dev zip"
+        run: "apk update && apk add cmake make gcc mingw-w64-binutils mingw-w64-crt mingw-w64-gcc mingw-w64-gcc-ccache mingw-w64-headers mingw-w64-headers-doc mingw-w64-winpthreads mingw-w64-winpthreads-doc"
 
       - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Get CMake
-        uses: lukka/get-cmake@latest
-        with:
-          cmakeVersion: 3.30.5
+      #- name: Get CMake
+      #  uses: lukka/get-cmake@latest
+      #  with:
+      #    cmakeVersion: 3.30.5
 
       - name: Prepare build
         run: cmake -B build -DCMAKE_TOOLCHAIN_FILE="mingw32.cmake"
@@ -29,31 +31,33 @@ jobs:
         run: "cmake --build build --target lovec --config Release --parallel 2"
 
       - name: "Prepackage"
-        run: "mkdir ship && cp build/love/*.dll ship/ && cp build/love/*.exe ship/ && cp build/bin/*.dll ship/ && cp build/SDL2/*.dll ship/ && cp build/mpg123/*.dll ship/ && cp build/openal-soft/*.dll ship/ && cp /usr/i686-w64-mingw32/lib/*.dll ship/ && cp /usr/lib/gcc/i686-w64-mingw32/13-win32/libgcc_s_dw2-1.dll ship/ && cp /usr/lib/gcc/i686-w64-mingw32/13-win32/libstdc++-6.dll ship/"
+        run: "mkdir ship && cp build/love/*.dll ship/ && cp build/love/*.exe ship/ && cp build/bin/*.dll ship/ && cp build/SDL2/*.dll ship/ && cp build/mpg123/*.dll ship/ && cp build/openal-soft/*.dll ship/ && cp /usr/i686-w64-mingw32/bin/libgcc_s_dw2-1.dll ship/ && cp /usr/i686-w64-mingw32/bin/libstdc++-6.dll ship/ && cp /usr/x86_64-w64-mingw32/bin/libwinpthread-1.dll ship/"
 
       - name: "Publish artifact"
         uses: actions/upload-artifact@v4
         with:
           path: ship
           name: love32
-          retention-days: 90
+          retention-days: 2
           compression-level: 9
   build64:
     name: 64-bit build
     runs-on: ubuntu-latest
+    container: amd64/alpine:3.22
     steps:
       - name: Setup
-        env:
-          DEBIAN_FRONTEND: non-interactive
-        run: "sudo apt update && sudo apt install -y build-essential make gcc gcc-multilib g++ mingw-w64 binutils-mingw-w64 mingw-w64-common mingw-w64-tools mingw-w64-i686-dev mingw-w64-x86-64-dev zip"
+        #env:
+        #  DEBIAN_FRONTEND: non-interactive
+        #run: "sudo apt update && sudo apt install -y build-essential make gcc gcc-multilib g++ mingw-w64 binutils-mingw-w64 mingw-w64-common mingw-w64-tools mingw-w64-i686-dev mingw-w64-x86-64-dev zip"
+        run: apk update && apk add cmake make gcc mingw-w64-binutils mingw-w64-crt mingw-w64-gcc mingw-w64-gcc-ccache mingw-w64-headers mingw-w64-headers-doc mingw-w64-winpthreads mingw-w64-winpthreads-doc
 
       - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Get CMake
-        uses: lukka/get-cmake@latest
-        with:
-          cmakeVersion: 3.30.5
+      #- name: Get CMake
+      #  uses: lukka/get-cmake@latest
+      #  with:
+      #    cmakeVersion: 3.30.5
 
       - name: Prepare build
         run: cmake -B build -DCMAKE_TOOLCHAIN_FILE="mingw64.cmake"
@@ -65,12 +69,12 @@ jobs:
         run: "cmake --build build --target lovec --config Release --parallel 2"
 
       - name: "Prepackage"
-        run: "mkdir ship && cp build/love/*.dll ship/ && cp build/love/*.exe ship/ && cp build/bin/*.dll ship/ && cp build/SDL2/*.dll ship/ && cp build/mpg123/*.dll ship/ && cp build/openal-soft/*.dll ship/ && cp /usr/x86_64-w64-mingw32/lib/*.dll ship/ && cp /usr/lib/gcc/x86_64-w64-mingw32/13-win32/libgcc_s_seh-1.dll ship/ && cp /usr/lib/gcc/i686-w64-mingw32/13-win32/libstdc++-6.dll ship/"
+        run: "mkdir ship && cp build/love/*.dll ship/ && cp build/love/*.exe ship/ && cp build/bin/*.dll ship/ && cp build/SDL2/*.dll ship/ && cp build/mpg123/*.dll ship/ && cp build/openal-soft/*.dll ship/ && cp /usr/x86_64-w64-mingw32/bin/libgcc_s_seh-1.dll ship/ && cp /usr/x86_64-w64-mingw32/bin/libstdc++-6.dll ship/ && cp /usr/x86_64-w64-mingw32/bin/libwinpthread-1.dll ship/"
 
       - name: "Publish artifact"
         uses: actions/upload-artifact@v4
         with:
           path: ship
           name: love64
-          retention-days: 90
+          retention-days: 2
           compression-level: 9
