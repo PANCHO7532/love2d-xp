@@ -5,8 +5,15 @@ jobs:
   build32:
     name: 32-bit build
     runs-on: ubuntu-latest
-    container: i386/alpine:3.22
+    container: 
+      image: i386/alpine:3.22
+      volumes:
+        - /tmp:/__e/node20_alpine
     steps:
+      # Fix checkout and upload-artifact to use local alternatives as the shipped node version is for another architecture
+      - name: Fix checkout and upload-artifact
+        run: apk update && apk add nodejs && mkdir -p /__e/node20_alpine/bin && ln -s $(which node) /__e/node20_alpine/bin/node && ln -s $(which npm) /__e/node20_alpine/bin/npm && ln -s $(which npx) /__e/node20_alpine/bin/npx
+
       - name: Setup
         #env:
         #  DEBIAN_FRONTEND: non-interactive
