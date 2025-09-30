@@ -117,7 +117,7 @@ jobs:
           name: ${{ needs.build64.outputs.artifact_name }}
 
       - name: Zip artifacts
-        run: ls -la && tree && cd build32/ship && zip -9 -r love2dxp-x86.zip ./ && cd ../../build64/ship && zip -9 -r love2dxp-x64.zip ./
+        run: cd build32 && zip -9 -r love2dxp-x86.zip ./ && cd ../build64 && zip -9 -r love2dxp-x64.zip ./
 
       - name: Create GitHub Release
         id: create_release
@@ -136,7 +136,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build32/ship/love2dxp-x86.zip
+          asset_path: ./build32/love2dxp-x86.zip
           asset_name: love2dxp-x86.zip
           asset_content_type: application/zip
 
@@ -146,6 +146,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build64/ship/love2dxp-x64.zip
+          asset_path: ./build64/love2dxp-x64.zip
           asset_name: love2dxp-x64.zip
           asset_content_type: application/zip
