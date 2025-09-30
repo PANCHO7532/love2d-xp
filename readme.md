@@ -4,34 +4,61 @@ Because it's fun to see if it's possible
 > [!IMPORTANT]  
 > The source code shown in this repository is exclusively intended to use under Windows **XP**
 >
-> Issues and support for other operating systems will not be covered or discussed.
+> Issues and support for other operating systems and further Windows versions will not be covered or discussed.
 
 > [!NOTE]
 > Everything is wired to work exclusively via cross-compilation with MinGW on Linux.
 >
 > Support for other compilers are not covered and I don't guarantee you that it compiles on anything else that's not MinGW
 
+## Installing
+> [!CAUTION]
+> If you're running Windows XP make sure you installed all updates, then install all redists for your machine here: [https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#unsupported-legacy-versions](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#unsupported-legacy-versions)
+> 
+> You will also need the `Visual C++ Redistributable for Visual Studio 2019 (version 16.7)` from here: [https://my.visualstudio.com/Downloads/](https://my.visualstudio.com/Downloads/) (make sure to install both x86/x64 executables)
+>
+> If you're **NOT** running Windows XP but any other Windows version, then just install these: [https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-supported-redistributable-version](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-supported-redistributable-version), keep in mind that running this in other systems that are not Windows XP isn't tested and not a current priority. You will not receive support if bugs arise (reporting issues for these are welcome though)
+
+> [!NOTE]
+> You need an OpenGL 2.1 compatible video card/drivers in order to run this.
+>
+> OpenGL 1.4 support is on the works.
+
+1) Download the .zip file from the releases page: [https://github.com/PANCHO7532/love2d-xp/releases](https://github.com/PANCHO7532/love2d-xp/releases) (you're encouraged to download the one for your processor, in doubt, download the 32-bit one)
+2) Unzip it to a clean folder (as in, an empty folder with nothing inside)
+3) Execute `love.exe`, if you can see the "no game" screen, then the engine is working!
+4) Drag your .love file to `love.exe` or the folder with your game files in order to load your game.
+
 ## Compile instructions
 You need a linux distribution. Period.
 No Windows (unironically), no MSYS (probably), just Linux!
 
-> Installing MinGW
+### Installing MinGW
+You will need a MinGW compiler that's targeted/built specifically for Windows XP compatbility, this is because LOVE will depend on libgcc and libstdc dlls and those have to be compiled for XP as well in order to avoid function calls on those dlls that aren't present on XP.
+
+I recommend you to get yourself the UCRT-posix flavor of MinGW, as it's more modern and theoretically more stable than MSVCRT (though I made modifications that hopefully support both of those), builds offered on the Releases page of this repository are also compiled with UCRT.
 
 The instructions vary according the linux distribution, the general gist for Ubuntu is running:
 
 `sudo apt install build-essential gcc gcc-multilib g++ cmake make mingw-w64 binutils-mingw-w64 mingw-w64-common mingw-w64-tools mingw-w64-i686-dev mingw-w64-x86-64-dev`
 
-> Preparing the build
+Builds generated in this repo are compiled with Alpine Linux for UCRT compatbility, if you're on Alpine, then run these:
+`apk add cmake make gcc g++ musl-dev linux-headers mingw-w64-binutils mingw-w64-crt mingw-w64-gcc mingw-w64-gcc-ccache mingw-w64-headers mingw-w64-headers-doc mingw-w64-winpthreads mingw-w64-winpthreads-doc`
+> [!NOTE]
+> On Alpine you can only compile for the CPU architecture that the OS is running, and there are native compilation tools in LOVE2D that fail due to this quirk as its gcc is not multilib.
+> If you want an specific architecture, you'll need to use a docker container or a VM of Alpine Linux with the correct architecture you want.
+
+### Preparing the build
 
 Spin up a terminal on this directory and write `cmake -B build -DCMAKE_TOOLCHAIN_FILE=mingw32.cmake`
 
 If you want to prepare the build for 64-bit, change the command part where it says `mingw32` to `mingw64`
 
-> Building
+### Building
 
 Execute `cmake --build build --target love --config Release` and pray
 
-> Running
+### Running
 
 By default, binaries are seemengly not moved properly in one-folder, you need to grab `love.dll` (`libliblove.dll` in some cases) and `love.exe` from `build/love` and put it on a clean directory, then grab the compiled luajit in `bin` directory, libmpg123, OpenAL32.dll, SDL2.dll from their respective directories on `build` directory, and finally, `libgcc*.dll`, `libstdc++6.dll` and `libwinpthread-1.dll` from `/usr/(arch)-w64-mingw32/bin`, where `(arch)` might be `i686` if you targeted 32 bits, `x86_64` if you targeted 64 bits. (If you can't find any of these last dlls, check the `lib` or `lib64` folder as distros sometimes put them there)
 
@@ -45,7 +72,7 @@ I personally think that a modern game engine running on XP is hilariously awesom
 ## How?
 By disabling a lot of code, pasting equivalent functions for modern functions and a little bit of *love* it surely can compile!
 
-MinGW is the compiler of choice in this journey, not only it can compile for Windows XP with a few defines, but it can go as far as NT 4! Though with the current state of LOVE2D, the hard stop will be Windows XP anyway.
+MinGW is the compiler of choice in this journey, not only it can compile for Windows XP with a few defines, but it can theoretically go as far as NT 4! Though with the current state of LOVE2D, the hard stop will be Windows XP anyway.
 
 This repository is a fusion of the megasource/love2d repos in order to keep the dependencies and engine code in one-place for convenience.
 
