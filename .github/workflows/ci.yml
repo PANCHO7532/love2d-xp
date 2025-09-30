@@ -1,10 +1,18 @@
 name: Build
-on: [workflow_dispatch]
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build32:
     name: 32-bit build
     runs-on: ubuntu-latest
+    outputs:
+      artifact_name: love2dxp-x86
     container: 
       image: i386/alpine:3.22
       volumes:
@@ -50,6 +58,8 @@ jobs:
   build64:
     name: 64-bit build
     runs-on: ubuntu-latest
+    outputs:
+      artifact_name: love2dxp-x86
     container: amd64/alpine:3.22
     steps:
       - name: Setup
@@ -85,3 +95,59 @@ jobs:
           name: love2dxp-x64
           retention-days: 2
           compression-level: 9
+  release:
+    name: Create new release
+    permissions: write-all
+    needs: [build32, build64]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download 32-bit artifact
+        id: artifact_download32
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build32.outputs.artifact_name }}
+
+      - name: Download 64-bit artifact
+        id: artifact_download64
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build64.outputs.artifact_name }}
+
+      #- name: Parse version
+      #  id: parsed_version
+      #  run: |
+      #      #!/bin/bash
+      #      echo "version=${GITHUB_REF//'refs/heads/v'/}" >> $GITHUB_OUTPUT
+      #  shell: bash
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload 32-bit asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.artifact_download32.download-path }}
+          asset_name: love2dxp-x86.zip
+          asset_content_type: application/zip
+
+      - name: Upload 64-bit asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.artifact_download32.download-path }}
+          asset_name: love2dxp-x64.zip
+          asset_content_type: application/zip
